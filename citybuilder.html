@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>City Builder Simulator Game</title>
-<meta name="author" content="Johnny Heggelund">
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+<meta name="description" content="Immerse yourself in a blast from the past with this retro City Building Simulator Game, reminiscent of the classic SimCity from 1989.">
+<meta name="author" content="AI Girl & Bossman">
+<meta name="robots" content="index, follow">
 <style>
 html,
 body {
@@ -619,19 +620,18 @@ width: 8px;
 height: 8px;
 }
 ::-webkit-scrollbar-track {
-background: LightBlue;
+background: #2c2c2c;
 }
 ::-webkit-scrollbar-thumb {
 background: #007bff;
 border-radius: 4px;
-box-shadow: 0 0 5px #007bff;
 }
 ::-webkit-scrollbar-thumb:hover {
 background: #0056b3;
 }
 * {
 scrollbar-width: thin;
-scrollbar-color: #007bff #000000;
+scrollbar-color: #007bff #2c2c2c;
 }
 </style>
 </head>
@@ -639,21 +639,21 @@ scrollbar-color: #007bff #000000;
 <div id="game-container">
 <div id="game-layout">
 <div id="ui-panel">
-<h3>Statistics</h3>
+<h3 id="stats-title"></h3>
 <div id="stats">
-<p>📅 Year: <span id="year">2025</span></p>
-<p>👨👩 Population: <span id="population">0</span></p>
-<p>💰 Budget: $<span id="budget">50000</span></p>
+<p><span id="year-label"></span>: <span id="year">2025</span></p>
+<p><span id="pop-label"></span>: <span id="population">0</span></p>
+<p><span id="budget-label"></span>: $<span id="budget">50000</span></p>
 <div id="budget-details">
-<p style="color: #4caf50;">Income: $<span id="income">0</span></p>
-<p style="color: #f44336;">Maintenance: $<span id="maintenance">0</span></p>
+<p style="color: #4caf50;"><span id="income-label"></span>: $<span id="income">0</span></p>
+<p style="color: #f44336;"><span id="maintenance-label"></span>: $<span id="maintenance">0</span></p>
 </div>
 </div>
 <div id="tax-rate-controls">
-<span>Tax:</span>
-<button class="tax-btn" data-rate="0.5" title="Set tax to low">Low</button>
-<button class="tax-btn active" data-rate="0.7" title="Set tax to medium">Medium</button>
-<button class="tax-btn" data-rate="1.0" title="Set tax to high">High</button>
+<span id="tax-label"></span>
+<button class="tax-btn" data-rate="0.5" id="tax-low-btn"></button>
+<button class="tax-btn active" data-rate="0.7" id="tax-med-btn"></button>
+<button class="tax-btn" data-rate="1.0" id="tax-high-btn"></button>
 </div>
 <div id="minimap-container">
 <div id="minimap-wrapper">
@@ -662,30 +662,30 @@ scrollbar-color: #007bff #000000;
 </div>
 </div>
 <hr />
-<h3>Building Tools</h3>
+<h3 id="tools-title"></h3>
 <div class="tool-btn-grid">
-<button class="tool-btn" data-tool="house" title="House">🏠 $700</button>
-<button class="tool-btn" data-tool="store" title="Store">🏬 $900</button>
-<button class="tool-btn" data-tool="road" title="Road">➖ $25</button>
-<button class="tool-btn" data-tool="park" title="Park">🌳 $450</button>
-<button class="tool-btn" data-tool="power-plant" title="Power Plant">⚡️ $10k</button>
-<button class="tool-btn" data-tool="power-line" title="Power Line">🔌 $50</button>
-<button class="tool-btn" data-tool="police-station" title="Police Station">🚓 $15k</button>
-<button class="tool-btn" data-tool="fire-station" title="Fire Station">🚒 $17k</button>
-<button class="tool-btn" data-tool="school" title="School">🏫 $12k</button>
-<button class="tool-btn" data-tool="stadium" title="Stadium">🏟️ $65k</button>
-<button class="tool-btn" data-tool="airport" title="Airport">✈️ $80k</button>
-<button class="tool-btn" data-tool="bulldoze" title="Demolish">💣 $50</button>
+<button class="tool-btn" data-tool="house" id="tool-house-btn">🏠 $700</button>
+<button class="tool-btn" data-tool="store" id="tool-store-btn">🏬 $900</button>
+<button class="tool-btn" data-tool="road" id="tool-road-btn">➖ $25</button>
+<button class="tool-btn" data-tool="park" id="tool-park-btn">🌳 $450</button>
+<button class="tool-btn" data-tool="power-plant" id="tool-power-plant-btn">⚡️ $10k</button>
+<button class="tool-btn" data-tool="power-line" id="tool-power-line-btn">🔌 $50</button>
+<button class="tool-btn" data-tool="police-station" id="tool-police-station-btn">🚓 $15k</button>
+<button class="tool-btn" data-tool="fire-station" id="tool-fire-station-btn">🚒 $17k</button>
+<button class="tool-btn" data-tool="school" id="tool-school-btn">🏫 $12k</button>
+<button class="tool-btn" data-tool="stadium" id="tool-stadium-btn">🏟️ $65k</button>
+<button class="tool-btn" data-tool="airport" id="tool-airport-btn">✈️ $80k</button>
+<button class="tool-btn" data-tool="bulldoze" id="tool-bulldoze-btn">💣 $50</button>
 </div>
 <hr />
-<h3>Game Controls</h3>
+<h3 id="controls-title"></h3>
 <div class="button-toolbar">
 <button id="night-mode-btn" class="control-btn" title="Night mode">🌙</button>
-<button id="save-btn" class="action-btn" title="Save your game">💾 Save</button>
-<button id="city-log-btn" class="action-btn" title="City Log">📖 Log</button>
-<button id="economy-btn" class="action-btn" title="Economy">📊 Economy</button>
-<button id="how-to-play-btn" class="action-btn" title="Help">❓ Help</button>
-<button id="new-game-btn" class="action-btn" title="Start a new city">✨ New Game</button>
+<button id="save-btn" class="action-btn" title="Save your game"></button>
+<button id="city-log-btn" class="action-btn" title="City Log"></button>
+<button id="economy-btn" class="action-btn" title="Economy"></button>
+<button id="how-to-play-btn" class="action-btn" title="Help"></button>
+<button id="new-game-btn" class="action-btn" title="Start a new city"></button>
 </div>
 </div>
 <div id="map-container">
@@ -701,8 +701,8 @@ scrollbar-color: #007bff #000000;
 <div id="tooltip"></div>
 <div id="fireworks-container">
 <div class="congrats-text">
-<h2>🏆 Congratulations! 🏆</h2>
-<p>You have built a magnificent city!</p>
+<h2 id="congrats-title"></h2>
+<p id="congrats-text-p"></p>
 </div>
 <div class="explosion"></div>
 <div class="explosion"></div>
@@ -723,27 +723,127 @@ scrollbar-color: #007bff #000000;
 <div id="economy-modal" class="modal">
 <div class="modal-content">
 <span id="economy-modal-close" class="modal-close">&times;</span>
-<h2>📊 Economy</h2>
+<h2 id="economy-title"></h2>
 <div id="economy-details"></div>
 </div>
 </div>
 </div>
 <script>
-// STATS-FETCHER-START
-fetch('https://www.chromebooker.com/stats/visitors.php', {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json'
-},
-body: JSON.stringify({ page: window.location.href })
-});
-// STATS-FETCHER-END
 document.addEventListener('DOMContentLoaded', () => {
+const lang = {
+statsTitle: "Statistics",
+year: "Year",
+population: "Population",
+budget: "Budget",
+income: "Income",
+maintenance: "Maintenance",
+tax: "Tax",
+taxLow: "Low",
+taxMedium: "Medium",
+taxHigh: "High",
+toolsTitle: "Building Tools",
+controlsTitle: "Game Controls",
+nightMode: "Night Mode",
+saveGame: "💾 Save",
+cityLog: "📖 Log",
+economy: "📊 Economy",
+help: "❓ Help",
+newGame: "✨ New Game",
+welcomeBack: "Welcome back, Mayor!",
+gameSaved: "💾 Game saved in your browser!",
+newCityBegins: "A new city has been founded!",
+taxSetTo: "Tax set to",
+notEnoughMoney: "Not enough money!",
+notEnoughSpace: "Not enough space for this 2x2 building!",
+built: "Built",
+house: "House",
+store: "Store",
+road: "Road",
+park: "Park",
+fountainPark: "Fountain Park",
+'power-plant': "Power Plant",
+'power-line': "Power Line",
+'police-station': "Police Station",
+'fire-station': "Fire Station",
+school: "School",
+stadium: "Stadium",
+airport: "Airport",
+bulldoze: "Demolish",
+lake: "Lake",
+tooltipPopulation: "Population",
+tooltipLoad: "Load",
+tooltipPower: "Power",
+tooltipYes: "Yes",
+tooltipNo: "No",
+tooltipDamaged: "(Damaged!)",
+fireOut: "🚒 Firefighters have extinguished a fire!",
+buildingLostToFire: "a building was lost in the fire!",
+insurancePayout: "💰 Received an insurance payout of",
+forDestroyed: "for the destroyed",
+fireStarted: "🔥 A fire has broken out!",
+fireSpreads: "🔥 The fire is spreading quickly due to high population density!",
+recessionHit: "📉 An economic recession has hit the city!",
+thunderstormDamage: "⛈️ A thunderstorm has damaged a power plant!",
+kingKongRampage: "🦍 King Kong is rampaging through the city!",
+winConditionReached: "🏆 Congratulations! You have reached",
+winConditionResidents: "residents!",
+bankruptcy: "BANKRUPTCY: The city went bankrupt in year",
+plantRepaired: "🛠️ A damaged power plant has been fully repaired!",
+crimeComplaint: "🚨 Residents are complaining about crime in the",
+crimeAreaNW: "northwest",
+crimeAreaNE: "northeast",
+crimeAreaSW: "southwest",
+crimeAreaSE: "southeast",
+crimeArea: "area!",
+congratulations: "🏆 Congratulations! 🏆",
+youBuiltCity: "You have built a magnificent city!",
+gameOver: "GAME OVER",
+cityBankruptIn: "Your city went bankrupt in year",
+youWon: "You won the game! Thank you for playing, and remember to take a 📷 screenshot before starting your next city!",
+restart: "✨ Restart",
+confirmNewGame: "Are you sure? This will delete your current city and start a new game.",
+howToPlayTitle: "How to Play City Builder",
+helpWelcome: "Welcome, Mayor! Your main goal is to build a thriving metropolis and reach a population of",
+helpGoal: "residents. But be careful – if your city's budget falls below zero, you'll go bankrupt and the game is over!",
+helpBasicsTitle: "Basics 💵",
+helpBasics1: "<strong>Income:</strong> Your main source of income is taxes, which are automatically collected from inhabited houses that have power.",
+helpBasics2: "<strong>Tax Level:</strong> You can control the city's tax level! A <strong>Low</strong> level makes residents happier and increases population growth at the expense of income. A <strong>High</strong> level earns more money but will slow city growth. It's a strategic choice!",
+helpBasics3: "<strong>Expenses:</strong> Every building you place has an annual maintenance cost. As your city grows, this maintenance rate will increase, so manage your expansion carefully!",
+helpServicesTitle: "City Services and Zoning 🏘️",
+helpServicesText: "Place buildings to attract residents and keep them happy. Happy homes grow faster!",
+helpServices1: "<strong>Houses (🏠):</strong> The heart of your city. As the individual population grows, they will visually evolve into larger apartment buildings (🏘️ -> 🏢).",
+helpServices2: "<strong>Parks (🌳):</strong> Give a small happiness boost to nearby homes. Some rare parks even have fountains (⛲️)! (Must also have power for lights, etc.)",
+helpServices3: "<strong>Lakes (💧):</strong> Houses built next to water get a natural happiness and growth bonus.",
+helpServices4: "<strong>Schools (🏫):</strong> Give a significant population growth bonus to all houses within their radius. A must for a growing city.",
+helpServices5: "<strong>Police (🚓) and Fire Stations (🚒):</strong> Increase safety and happiness, which promotes growth. Fire stations are crucial for preventing fires from spreading.",
+helpServices6: "<strong>Large Venues (🏟️✈️):</strong> The Stadium and Airport are 2x2 buildings that require a free area. They are expensive but provide huge benefits. The airport, in particular, generates massive annual income. It takes many years to pay off the debt on large buildings before you start making a profit, so you should have a solid budget that can handle going into the red for a while.",
+helpInfraTitle: "Infrastructure ⚡️",
+helpInfraText: "A city cannot function without basic infrastructure.",
+helpInfra1: "<strong>Power Plant (⚡️):</strong> The source of all electricity. Each plant can only support",
+helpInfra1_2: "connections. Hover over a plant to see its current load.",
+helpInfra2: "<strong>Power Lines:</strong> Use these to extend the power grid over long distances to reach remote areas. They automatically connect to adjacent buildings and other lines.",
+helpInfra3: "<strong>Roads:</strong> Provide the basic connections for your city to develop. Over time, roads in busy areas will begin to show visual signs of wear.",
+helpDisastersTitle: "Disasters and Challenges 🔥",
+helpDisastersText: "Watch the event ticker at the top of the screen for news! A mayor's job is never easy.",
+helpDisasters1: "<strong>Fires (🔥):</strong> Can break out randomly in buildings. If you don't have a fire station nearby, they can spread and destroy entire neighborhoods!",
+helpDisasters2: "<strong>Thunderstorms (⛈️):</strong> A powerful storm can damage a power plant and shut it down completely. Repairs are not instant and can take several years, causing prolonged power outages.",
+helpDisasters3: "<strong>Recession (📉):</strong> An economic downturn can happen at any time and temporarily halve the city's tax income.",
+helpDisasters4: "<strong>King Kong (🦍):</strong> Yes, really. Sometimes a giant ape will rampage through your city and clear a path of destruction.",
+helpGoodLuck: "Good luck, Mayor!",
+economyTitle: "📊 Economy",
+annualNetResult: "Annual Net Result",
+incomeDistribution: "Income Distribution",
+totalIncome: "Total Income",
+expenseDistribution: "Expense Distribution",
+totalExpenses: "Total Expenses",
+cityLogTitle: "City Log",
+noLogEvents: "No events logged yet."
+};
 function startGame() {
 init();
 const savedGameExists = localStorage.getItem('cityBuilderSave') !== null;
 if (savedGameExists) {
-showTickerMessage('Welcome back, Mayor!');
+showTickerMessage(lang.welcomeBack);
 } else {
 showHelp();
 }
@@ -783,7 +883,7 @@ let budget = 50000;
 let population = 0;
 let year = 2025;
 let taxRate = 0.7;
-let gameWon = false;
+let isGameOver = false;
 let isDraggingMinimap = false;
 let isRecessionYear = false;
 let isDisasterAnimating = false;
@@ -792,11 +892,6 @@ const costs = {
 house: 700, store: 900, park: 450, stadium: 65000, airport: 80000,
 'power-plant': 10000, 'power-line': 50, 'police-station': 15000,
 'fire-station': 17000, school: 12000, bulldoze: 50, road: 25,
-};
-const buildingNames = {
-house: 'House', store: 'Store', park: 'Park', stadium: 'Stadium', airport: 'Airport',
-'power-plant': 'Power Plant', 'police-station': 'Police Station',
-'fire-station': 'Fire Station', school: 'School', road: 'Road',
 };
 const buildingEmojis = {
 house: '🏠', store: '🏬', park: '🌳', 'power-plant': '⚡️', 'police-station': '🚓',
@@ -904,30 +999,30 @@ maintenanceEl.textContent = Math.floor(maintenanceCosts).toLocaleString();
 year++;
 updateUI();
 updateMinimap();
-if (population >= WIN_CONDITION_POPULATION && !gameWon) {
-gameWon = true;
-logEvent(`🏆 Congratulations! You have reached ${WIN_CONDITION_POPULATION.toLocaleString()} residents!`);
+if (population >= WIN_CONDITION_POPULATION && !isGameOver) {
+isGameOver = true;
+logEvent(`${lang.winConditionReached} ${WIN_CONDITION_POPULATION.toLocaleString()} ${lang.winConditionResidents}`);
 const fireworks = document.getElementById('fireworks-container');
 fireworks.classList.add('active');
 fireworks.addEventListener('click', () => {
 fireworks.classList.remove('active');
-handleGameOver('You won the game!!! Thank you for playing, and remember to take a 📷 screenshot before starting your next city!');
+handleGameOver(lang.youWon);
 }, { once: true });
 }
-if (budget < 0 && !gameWon) {
-gameWon = true;
-logEvent(`BANKRUPTCY: The city went bankrupt in ${year}.`);
-handleGameOver(`GAME OVER\n\nYour city went bankrupt in ${year}!`);
+if (budget < 0 && !isGameOver) {
+isGameOver = true;
+logEvent(`${lang.bankruptcy} ${year}.`);
+handleGameOver(`${lang.gameOver}\n\n${lang.cityBankruptIn} ${year}!`);
 }
 }
 function onCellClick(e) {
 const cellElement = e.target.closest('.grid-cell');
 if (!cellElement) return;
 const index = parseInt(cellElement.dataset.index);
-if (isDisasterAnimating || !currentTool || isNaN(index) || gameWon || budget < 0) return;
+if (isDisasterAnimating || !currentTool || isNaN(index) || isGameOver || budget < 0) return;
 const cost = costs[currentTool] || 0;
 if (budget < cost) {
-alert('Not enough money!');
+alert(lang.notEnoughMoney);
 return;
 }
 let cell = world[index];
@@ -939,7 +1034,7 @@ budget -= cost;
 place2x2Building(index, currentTool);
 buildingPlaced = true;
 } else {
-alert('Not enough space for this 2x2 building!');
+alert(lang.notEnoughSpace);
 }
 } else if (currentTool === 'road') {
 if (cell.base === 'grass' && !cell.building) {
@@ -953,8 +1048,9 @@ budget -= cost;
 cell.hasPowerLine = true;
 }
 } else if (currentTool === 'bulldoze') {
-if (cell.building) {
+if (cell.building || cell.hasPowerLine || cell.base === 'road') {
 budget -= cost;
+if (cell.building) {
 if (largeBuildings.includes(cell.building.type)) {
 clear2x2Building(cell.building.originIndex);
 } else {
@@ -962,12 +1058,11 @@ cell.building = null;
 }
 if (cell.onFire) cell.onFire = false;
 } else if (cell.hasPowerLine) {
-budget -= cost;
 cell.hasPowerLine = false;
 } else if (cell.base === 'road') {
-budget -= cost;
 cell.base = 'grass';
 cell.roadWear = 0;
+}
 }
 } else {
 if (!cell.building && cell.base === 'grass' && !cell.hasPowerLine) {
@@ -980,7 +1075,7 @@ buildingPlaced = true;
 }
 }
 if (buildingPlaced) {
-showTickerMessage(`Built ${buildingNames[currentTool]}.`);
+showTickerMessage(`${lang.built} ${lang[currentTool]}.`);
 }
 distributePower(true);
 updateUI();
@@ -993,17 +1088,17 @@ const fireStationNearby = getNeighbors(index, 20).some(
 );
 if (fireStationNearby) {
 cell.onFire = false;
-logEvent('🚒 Firefighters have extinguished a fire!');
+logEvent(lang.fireOut);
 } else {
 if (Math.random() < 0.9) {
 const buildingType = cell.building?.type;
-logEvent(`🔥 A ${buildingNames[buildingType] || 'building'} was lost in the fire!`);
+logEvent(`🔥 ${lang[buildingType] || 'A building'} ${lang.buildingLostToFire}`);
 if (buildingType) {
 const originalCost = costs[buildingType] || 0;
 const insurancePayout = Math.floor(originalCost * 0.6);
 budget += insurancePayout;
 if (insurancePayout > 0) {
-logEvent(`💰 Received an insurance payout of $${insurancePayout.toLocaleString()} for the destroyed ${buildingNames[buildingType]}.`);
+logEvent(`${lang.insurancePayout} $${insurancePayout.toLocaleString()} ${lang.forDestroyed} ${lang[buildingType]}.`);
 }
 if (largeBuildings.includes(buildingType)) {
 clear2x2Building(cell.building.originIndex);
@@ -1035,9 +1130,9 @@ const buildings = world.map((c, i) => (c.building ? i : -1)).filter((i) => i !==
 if (buildings.length > 0) {
 const fireIndex = buildings[Math.floor(Math.random() * buildings.length)];
 world[fireIndex].onFire = true;
-logEvent('🔥 A fire has broken out!');
+logEvent(lang.fireStarted);
 if (population > 40000 && Math.random() < 0.3) {
-logEvent('🔥 The fire spreads quickly due to high population density!');
+logEvent(lang.fireSpreads);
 getNeighbors(fireIndex, 1).forEach((nIndex) => {
 const neighborCell = world[nIndex];
 if (neighborCell.building && !neighborCell.onFire) {
@@ -1048,7 +1143,7 @@ neighborCell.onFire = true;
 }
 } else if (chosenDisaster === 'recession') {
 isRecessionYear = true;
-logEvent('📉 An economic recession has hit the city!');
+logEvent(lang.recessionHit);
 } else if (chosenDisaster === 'thunderstorm') {
 const powerPlants = world
 .map((c, i) => (c.building?.type === 'power-plant' && !c.building.isDamaged ? i : -1))
@@ -1056,10 +1151,10 @@ const powerPlants = world
 if (powerPlants.length > 0) {
 const targetPlantIndex = powerPlants[Math.floor(Math.random() * powerPlants.length)];
 world[targetPlantIndex].building.isDamaged = true;
-logEvent('⛈️ A thunderstorm has damaged a power plant!');
+logEvent(lang.thunderstormDamage);
 }
 } else if (chosenDisaster === 'kingkong') {
-logEvent('🦍 King Kong is rampaging!');
+logEvent(lang.kingKongRampage);
 kingKongRampage();
 }
 }
@@ -1101,18 +1196,18 @@ btn.addEventListener('click', (e) => {
 taxRate = parseFloat(e.currentTarget.dataset.rate);
 document.querySelectorAll('.tax-btn').forEach((b) => b.classList.remove('active'));
 e.currentTarget.classList.add('active');
-showTickerMessage(`Tax set to ${e.currentTarget.textContent.trim()}.`);
+showTickerMessage(`${lang.taxSetTo} ${e.currentTarget.textContent.trim()}.`);
 });
 });
 if (saveBtn) {
 saveBtn.addEventListener('click', () => {
-if (window.gameOver) return;
+if (isGameOver) return;
 try {
 const data = JSON.stringify({
-world, budget, population, year, gameWon, gameLog, taxRate,
+world, budget, population, year, isGameOver, gameLog, taxRate,
 });
 localStorage.setItem('cityBuilderSave', data);
-showTickerMessage('💾 Game saved in your browser!');
+showTickerMessage(lang.gameSaved);
 } catch (e) {
 console.error('Error saving game:', e);
 alert('Could not save the game. Your browser may be out of storage space or in private mode.');
@@ -1122,13 +1217,12 @@ alert('Could not save the game. Your browser may be out of storage space or in p
 if (newGameBtn) {
 newGameBtn.addEventListener('click', (e) => {
 e.preventDefault();
-if (confirm('Are you sure? This will delete your current city and start a new game.')) {
+if (confirm(lang.confirmNewGame)) {
 localStorage.removeItem('cityBuilderSave');
 budget = 50000;
 population = 0;
 year = 2025;
-gameWon = false;
-window.gameOver = false;
+isGameOver = false;
 gameLog = [];
 isRecessionYear = false;
 isDisasterAnimating = false;
@@ -1136,14 +1230,14 @@ taxRate = 0.7;
 document.querySelectorAll('.tax-btn').forEach((b) => b.classList.remove('active'));
 document.querySelector('.tax-btn[data-rate="0.7"]').classList.add('active');
 if (saveBtn) saveBtn.disabled = false;
-newGameBtn.textContent = '✨ New Game';
+newGameBtn.textContent = lang.newGame;
 initEmptyWorld();
 distributePower(true);
 updateUI();
 updateMinimap();
 if (gameInterval) clearInterval(gameInterval);
 gameInterval = setInterval(simulateYear, 10000);
-showTickerMessage('A new city begins!');
+showTickerMessage(lang.newCityBegins);
 }
 });
 }
@@ -1236,6 +1330,43 @@ const isPowerConnection = (index) => {
 const neighbor = world[index];
 return neighbor.hasPowerLine || (neighbor.building && neighbor.building.type !== 'park');
 };
+function updateStaticUIText() {
+document.getElementById('stats-title').textContent = lang.statsTitle;
+document.getElementById('year-label').innerHTML = `📅 ${lang.year}`;
+document.getElementById('pop-label').innerHTML = `👨‍👩‍👧‍👦 ${lang.population}`;
+document.getElementById('budget-label').innerHTML = `💰 ${lang.budget}`;
+document.getElementById('income-label').textContent = lang.income;
+document.getElementById('maintenance-label').textContent = lang.maintenance;
+document.getElementById('tax-label').textContent = `${lang.tax}:`;
+document.getElementById('tax-low-btn').title = `${lang.taxSetTo} ${lang.taxLow}`;
+document.getElementById('tax-low-btn').textContent = lang.taxLow;
+document.getElementById('tax-med-btn').title = `${lang.taxSetTo} ${lang.taxMedium}`;
+document.getElementById('tax-med-btn').textContent = lang.taxMedium;
+document.getElementById('tax-high-btn').title = `${lang.taxSetTo} ${lang.taxHigh}`;
+document.getElementById('tax-high-btn').textContent = lang.taxHigh;
+document.getElementById('tools-title').textContent = lang.toolsTitle;
+document.getElementById('controls-title').textContent = lang.controlsTitle;
+document.getElementById('tool-house-btn').title = lang.house;
+document.getElementById('tool-store-btn').title = lang.store;
+document.getElementById('tool-road-btn').title = lang.road;
+document.getElementById('tool-park-btn').title = lang.park;
+document.getElementById('tool-power-plant-btn').title = lang['power-plant'];
+document.getElementById('tool-power-line-btn').title = lang['power-line'];
+document.getElementById('tool-police-station-btn').title = lang['police-station'];
+document.getElementById('tool-fire-station-btn').title = lang['fire-station'];
+document.getElementById('tool-school-btn').title = lang.school;
+document.getElementById('tool-stadium-btn').title = lang.stadium;
+document.getElementById('tool-airport-btn').title = lang.airport;
+document.getElementById('tool-bulldoze-btn').title = lang.bulldoze;
+document.getElementById('save-btn').textContent = lang.saveGame;
+document.getElementById('city-log-btn').textContent = lang.cityLog;
+document.getElementById('economy-btn').textContent = lang.economy;
+document.getElementById('how-to-play-btn').textContent = lang.help;
+document.getElementById('new-game-btn').textContent = lang.newGame;
+document.getElementById('economy-title').textContent = lang.economyTitle;
+document.getElementById('congrats-title').textContent = lang.congratulations;
+document.getElementById('congrats-text-p').textContent = lang.youBuiltCity;
+}
 function updateUI() {
 if (budgetEl) budgetEl.textContent = Math.floor(budget).toLocaleString();
 if (populationEl) populationEl.textContent = population.toLocaleString();
@@ -1318,7 +1449,7 @@ eventTicker.style.opacity = 0;
 }
 }
 function logEvent(message) {
-gameLog.unshift(`Year ${year}: ${message}`);
+gameLog.unshift(`${lang.year} ${year}: ${message}`);
 if (gameLog.length > MAX_LOG_ENTRIES) {
 gameLog.pop();
 }
@@ -1327,11 +1458,11 @@ showTickerMessage(message);
 function showLog() {
 const modal = document.getElementById('how-to-play-modal');
 const modalContent = modal.querySelector('.modal-content');
-modalContent.innerHTML = '<span class="modal-close">&times;</span><h2>City Log</h2>';
+modalContent.innerHTML = `<span class="modal-close">&times;</span><h2>${lang.cityLogTitle}</h2>`;
 const logList = document.createElement('ul');
 logList.style.cssText = 'list-style-type: none; padding: 0;';
 if (gameLog.length === 0) {
-logList.innerHTML = '<li>No events logged yet.</li>';
+logList.innerHTML = `<li>${lang.noLogEvents}</li>`;
 } else {
 gameLog.forEach((entry) => {
 const li = document.createElement('li');
@@ -1348,20 +1479,20 @@ function showHelp() {
 const modal = document.getElementById('how-to-play-modal');
 const modalContent = modal.querySelector('.modal-content');
 modalContent.innerHTML = `<span class="modal-close">&times;</span>
-<h2>How to Play City Builder</h2>
-<p>Welcome, Mayor! Your main goal is to build a thriving metropolis and reach a population of <strong>${WIN_CONDITION_POPULATION.toLocaleString()} residents</strong>. But be careful – if your city's budget falls below zero, you go bankrupt and the game is over!</p>
-<h4>Basics 💵</h4>
-<ul><li><strong>Income:</strong> Your main source of income is taxes, which are automatically collected from inhabited houses that have power.</li><li><strong>Tax Level:</strong> You can control the city's tax level! A <strong>Low</strong> level makes residents happier and increases population growth at the expense of income. A <strong>High</strong> level earns more money but will slow city growth. It's a strategic choice!</li><li><strong>Expenses:</strong> Every building you place has an annual maintenance cost. As your city grows, this maintenance rate will increase, so manage your expansion carefully!</li></ul>
-<h4>City Services and Zoning 🏘️</h4>
-<p>Place buildings to attract residents and keep them happy. Happy homes grow faster!</p>
-<ul><li><strong>Houses (🏠):</strong> The heart of your city. As the individual population grows, they will visually evolve into larger apartment buildings (🏘️ -> 🏢).</li><li><strong>Parks (🌳):</strong> Give a small happiness boost to nearby homes. Some rare parks even have fountains (⛲️)! (Must also have power for lights, etc.)</li><li><strong>Lakes (💧):</strong> Houses built next to water get a natural happiness and growth bonus.</li><li><strong>Schools (🏫):</strong> Give a significant population growth bonus to all houses within their radius. A must for a growing city.</li><li><strong>Police (🚓) and Fire Stations (🚒):</strong> Increase safety and happiness, which promotes growth. Fire stations are crucial for preventing fires from spreading.</li><li><strong>Large Arenas (🏟️✈️):</strong> Stadium and Airport are 2x2 buildings that require a free area. They are expensive but give huge benefits. Especially the airport generates massive annual income. It takes many years to pay off the debt on large buildings before you start making money from them. Therefore, you should have a solid budget that can handle going negative for a while.</li></ul>
-<h4>Infrastructure ⚡️</h4>
-<p>A city cannot function without basic infrastructure.</p>
-<ul><li><strong>Power Plant (⚡️):</strong> The source of all electricity. Each plant can only support ${POWER_PLANT_CAPACITY} connections. Hover over a plant to see its current load.</li><li><strong>Power Lines:</strong> Use these to extend the power grid over long distances to reach remote areas. They automatically connect to adjacent buildings and other lines.</li><li><strong>Roads:</strong> Provide the basic connections for your city to develop. Over time, roads in busy areas will begin to show visual signs of wear.</li></ul>
-<h4>Disasters and Challenges 🔥</h4>
-<p>Watch the event ticker at the top of the screen for news! A mayor's job is never easy.</p>
-<ul><li><strong>Fires (🔥):</strong> Can break out randomly in buildings. If you don't have a fire station nearby, they can spread and destroy entire neighborhoods!</li><li><strong>Thunderstorms (⛈️):</strong> A powerful storm can damage a power plant and shut it down completely. Repairs are not instant and can take several years, causing prolonged power outages.</li><li><strong>Recession (📉):</strong> An economic downturn can happen at any time and temporarily halve the city's tax income.</li><li><strong>King Kong (🦍):</strong> Yes, really. Sometimes a giant ape will rampage through your city and clear a path of destruction.</li></ul>
-<p style="text-align: center; margin-top: 20px;">Good luck, Mayor!</p>`;
+<h2>${lang.howToPlayTitle}</h2>
+<p>${lang.helpWelcome} <strong>${WIN_CONDITION_POPULATION.toLocaleString()}</strong> ${lang.helpGoal}</p>
+<h4>${lang.helpBasicsTitle}</h4>
+<ul><li>${lang.helpBasics1}</li><li>${lang.helpBasics2}</li><li>${lang.helpBasics3}</li></ul>
+<h4>${lang.helpServicesTitle}</h4>
+<p>${lang.helpServicesText}</p>
+<ul><li>${lang.helpServices1}</li><li>${lang.helpServices2}</li><li>${lang.helpServices3}</li><li>${lang.helpServices4}</li><li>${lang.helpServices5}</li><li>${lang.helpServices6}</li></ul>
+<h4>${lang.helpInfraTitle}</h4>
+<p>${lang.helpInfraText}</p>
+<ul><li>${lang.helpInfra1} ${POWER_PLANT_CAPACITY} ${lang.helpInfra1_2}</li><li>${lang.helpInfra2}</li><li>${lang.helpInfra3}</li></ul>
+<h4>${lang.helpDisastersTitle}</h4>
+<p>${lang.helpDisastersText}</p>
+<ul><li>${lang.helpDisasters1}</li><li>${lang.helpDisasters2}</li><li>${lang.helpDisasters3}</li><li>${lang.helpDisasters4}</li></ul>
+<p style="text-align: center; margin-top: 20px;">${lang.helpGoodLuck}</p>`;
 modalContent.querySelector('.modal-close').addEventListener('click', () => { modal.style.display = 'none'; });
 modal.style.display = 'flex';
 }
@@ -1369,24 +1500,24 @@ function showEconomyWindow() {
 const modal = document.getElementById('economy-modal');
 const economyDetails = document.getElementById('economy-details');
 const { incomeSources, expenseSources } = getEconomyData(false);
-let incomeHtml = '<hr><h4>Income Distribution</h4><ul>';
+let incomeHtml = `<hr><h4>${lang.incomeDistribution}</h4><ul>`;
 Object.keys(incomeSources).forEach((key) => {
 if (key !== 'total' && incomeSources[key].count > 0) {
 const name = key.charAt(0).toUpperCase() + key.slice(1);
-const englishNames = { Houses: 'Houses', Stores: 'Stores', Airport: 'Airport' };
-incomeHtml += `<li>${englishNames[name] || name} (${incomeSources[key].count}): <strong>$${Math.floor(incomeSources[key].totalIncome).toLocaleString()}</strong></li>`;
+const translatedName = { Houses: lang.house, Stores: lang.store, Airport: lang.airport };
+incomeHtml += `<li>${translatedName[name] || name} (${incomeSources[key].count}): <strong>$${Math.floor(incomeSources[key].totalIncome).toLocaleString()}</strong></li>`;
 }
 });
-incomeHtml += `</ul><p class="text-green"><strong>Total income: $${Math.floor(incomeSources.total).toLocaleString()}</strong></p><hr>`;
-let expenseHtml = '<h4>Expense Distribution</h4><ul>';
+incomeHtml += `</ul><p class="text-green"><strong>${lang.totalIncome}: $${Math.floor(incomeSources.total).toLocaleString()}</strong></p><hr>`;
+let expenseHtml = `<h4>${lang.expenseDistribution}</h4><ul>`;
 Object.keys(expenseSources).forEach((key) => {
 if (key !== 'total' && expenseSources[key].count > 0) {
-expenseHtml += `<li>${buildingNames[key]} (${expenseSources[key].count}): <strong>$${Math.floor(expenseSources[key].totalMaintenance).toLocaleString()}</strong></li>`;
+expenseHtml += `<li>${lang[key] || key} (${expenseSources[key].count}): <strong>$${Math.floor(expenseSources[key].totalMaintenance).toLocaleString()}</strong></li>`;
 }
 });
-expenseHtml += `</ul><p class="text-red"><strong>Total expenses: $${Math.floor(expenseSources.total).toLocaleString()}</strong></p><hr>`;
+expenseHtml += `</ul><p class="text-red"><strong>${lang.totalExpenses}: $${Math.floor(expenseSources.total).toLocaleString()}</strong></p><hr>`;
 const netProfit = incomeSources.total - expenseSources.total;
-const netHtml = `<h3>Annual Net Result: <strong class="${netProfit >= 0 ? 'text-green' : 'text-red'}">$${Math.floor(netProfit).toLocaleString()}</strong></h3>`;
+const netHtml = `<h3>${lang.annualNetResult}: <strong class="${netProfit >= 0 ? 'text-green' : 'text-red'}">$${Math.floor(netProfit).toLocaleString()}</strong></h3>`;
 economyDetails.innerHTML = netHtml + incomeHtml + expenseHtml;
 modal.style.display = 'flex';
 }
@@ -1513,7 +1644,7 @@ function handleRepairs() {
 world.forEach((cell) => {
 if (cell.building?.type === 'power-plant' && cell.building.isDamaged && Math.random() < 0.25) {
 cell.building.isDamaged = false;
-logEvent('🛠️ A damaged power plant has been fully repaired!');
+logEvent(lang.plantRepaired);
 }
 });
 }
@@ -1539,8 +1670,8 @@ else quadrantCrime.se++;
 });
 const maxCrimeQuadrant = Object.keys(quadrantCrime).reduce((a, b) => (quadrantCrime[a] > quadrantCrime[b] ? a : b));
 if (quadrantCrime[maxCrimeQuadrant] > 4) {
-const quadrantNames = { nw: 'northwest', ne: 'northeast', sw: 'southwest', se: 'southeast' };
-logEvent(`🚨 Residents are complaining about crime in the ${quadrantNames[maxCrimeQuadrant] || maxCrimeQuadrant} area!`);
+const quadrantNames = { nw: lang.crimeAreaNW, ne: lang.crimeAreaNE, sw: lang.crimeAreaSW, se: lang.crimeAreaSE };
+logEvent(`${lang.crimeComplaint} ${quadrantNames[maxCrimeQuadrant] || maxCrimeQuadrant} ${lang.crimeArea}`);
 }
 }
 function kingKongRampage() {
@@ -1581,7 +1712,7 @@ setTimeout(() => {
 alert(message);
 if (saveBtn) saveBtn.disabled = true;
 if (newGameBtn) {
-newGameBtn.textContent = '✨ Restart';
+newGameBtn.textContent = lang.restart;
 newGameBtn.style.backgroundColor = '#4CAF50';
 }
 }, 100);
@@ -1619,7 +1750,7 @@ crimeLevel: cell.crimeLevel || 0,
 budget = data.budget;
 population = data.population;
 year = data.year;
-gameWon = data.gameWon || false;
+isGameOver = data.isGameOver || false;
 gameLog = data.gameLog || [];
 taxRate = data.taxRate || 0.7;
 document.querySelectorAll('.tax-btn').forEach((btn) => {
@@ -1629,7 +1760,6 @@ btn.classList.add('active');
 }
 });
 } else {
-console.log("Saved data is empty. Starting a new game.");
 initEmptyWorld();
 }
 } catch (e) {
@@ -1648,15 +1778,15 @@ if (isNaN(index)) return;
 const cellData = world[index];
 let text = '';
 if (cellData.building) {
-text = buildingNames[cellData.building.type] || cellData.building.type;
-if (cellData.building.type === 'park') text = cellData.building.hasFountain ? 'Fountain Park' : 'Park';
-if (cellData.building.type === 'house') text += `\nPopulation: ${Math.floor(cellData.building.population)}`;
-if (cellData.building.type === 'power-plant') text += `\nLoad: ${cellData.building.powerLoad || 0} / ${cellData.building.isDamaged ? 0 : POWER_PLANT_CAPACITY}`;
-text += `\nPower: ${cellData.building.powered ? 'Yes' : 'No'}`;
-if (cellData.building.isDamaged) text += `\n(Damaged!)`;
-} else if (cellData.hasPowerLine) text = 'Power Line';
-else if (cellData.base === 'road') text = 'Road';
-else if (cellData.base === 'lake') text = 'Lake';
+text = lang[cellData.building.type] || cellData.building.type;
+if (cellData.building.type === 'park') text = cellData.building.hasFountain ? lang.fountainPark : lang.park;
+if (cellData.building.type === 'house') text += `\n${lang.tooltipPopulation}: ${Math.floor(cellData.building.population)}`;
+if (cellData.building.type === 'power-plant') text += `\n${lang.tooltipLoad}: ${cellData.building.powerLoad || 0} / ${cellData.building.isDamaged ? 0 : POWER_PLANT_CAPACITY}`;
+text += `\n${lang.tooltipPower}: ${cellData.building.powered ? lang.tooltipYes : lang.tooltipNo}`;
+if (cellData.building.isDamaged) text += `\n${lang.tooltipDamaged}`;
+} else if (cellData.hasPowerLine) text = lang['power-line'];
+else if (cellData.base === 'road') text = lang.road;
+else if (cellData.base === 'lake') text = lang.lake;
 if (cellData.onFire) text = `🔥 ${text} 🔥`;
 if (text) {
 tooltip.innerText = text;
@@ -1688,6 +1818,7 @@ layer.style.height = `${gridPixelSize}px`;
 });
 loadWorld();
 createGrid();
+updateStaticUIText();
 setupEventListeners();
 updateMinimapViewport();
 createClouds();
@@ -1700,6 +1831,6 @@ gameInterval = setInterval(simulateYear, 10000);
 startGame();
 });
 </script>
+<script src="/stats/tracker.js" defer></script>
 </body>
-</html>
 </html>
